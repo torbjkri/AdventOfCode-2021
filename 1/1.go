@@ -1,20 +1,25 @@
 package dec1
 
 import (
-	"bufio"
-	"errors"
-	"flag"
-	"log"
-	"os"
+	"my_utils"
 	"strconv"
 )
 
-func Solve1() int {
-	data, err := ReadFile("C:/Dev/Go/AdventOfCodode-2021/1/data")
+func getData(filename string) []int {
+	data := my_utils.ReadFile(filename)
 
-	if err != nil {
-		log.Fatal("Unable to read file")
+	var result []int
+
+	for _, ln := range data {
+		num, _ := strconv.Atoi(ln)
+		result = append(result, num)
 	}
+
+	return result
+}
+
+func Solve1() int {
+	data := getData("C:/Dev/Go/AdventOfCode-2021/1/data")
 
 	count := 0
 
@@ -31,11 +36,7 @@ func Solve1() int {
 }
 
 func Solve2() int {
-	data, err := ReadFile("C:/Dev/Go/AdventOfCodode-2021/1/data")
-
-	if err != nil {
-		log.Fatal("Unable to read file")
-	}
+	data := getData("C:/Dev/Go/AdventOfCode-2021/1/data")
 
 	count := 0
 
@@ -55,37 +56,4 @@ func Solve2() int {
 	}
 
 	return count
-}
-
-func ReadFile(filename string) ([]int, error) {
-	if filename == "" {
-		return nil, errors.New("Invalid string")
-	}
-
-	fptr := flag.String("fpath", filename, "File path to read from")
-	flag.Parse()
-
-	f, err := os.Open(*fptr)
-
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-
-	defer func() {
-		if err = f.Close(); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	s := bufio.NewScanner(f)
-
-	var data []int
-
-	for s.Scan() {
-		num, _ := strconv.Atoi(s.Text())
-		data = append(data, num)
-	}
-
-	return data, nil
 }
