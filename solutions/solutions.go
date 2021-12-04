@@ -19,5 +19,6 @@ func main() {
 	fmt.Println("December 3 - B ", dec3.Solve2())
 	fmt.Println()
 	fmt.Println("December 4 - A ", dec4.Solve1())
+	fmt.Println("December 4 - B ", dec4.Solve2())
 
 }

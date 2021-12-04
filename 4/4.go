@@ -135,27 +135,38 @@ func Solve1() int {
 	return -1
 }
 
+func remove(b []*Board, i int) []*Board {
+	b[i] = b[len(b)-1]
+	return b[:len(b)-1]
+}
+
+func print(b *Board) {
+	for _, line := range b.data_ {
+		fmt.Println(line)
+	}
+	fmt.Println()
+	fmt.Println()
+}
+
 func Solve2() int {
 	input, boards := getData("C:/Dev/Go/AdventOfCode-2021/4/data")
 
 	for _, in := range input {
+		var bingo_boards []int
 		for board_idx, _ := range boards {
 			if hit, idx := boards[board_idx].CheckInput(in); hit == true {
 				if bingo := boards[board_idx].CheckBingo(idx); bingo == true {
-
-					return boards[board_idx].data_sum_ * in
+					bingo_boards = append(bingo_boards, board_idx)
+					if len(boards) == 1 {
+						return boards[0].data_sum_ * in
+					}
 				}
 			}
 		}
-	}
-
-	for _, board := range boards {
-		for _, line := range board.data_ {
-			fmt.Println(line)
+		for k, _ := range bingo_boards {
+			idx := len(bingo_boards) - 1 - k
+			boards = remove(boards, bingo_boards[idx])
 		}
-		fmt.Println()
-		fmt.Println(board.data_sum_)
-		fmt.Println()
 	}
 
 	return -1
