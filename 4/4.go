@@ -32,9 +32,7 @@ func (b *Board) CheckInput(input int) (bool, [2]int) {
 
 func (b *Board) checkBingoRow(idx int) bool {
 	for i := 0; i < 5; i++ {
-		if b.data_[idx][i].ticked_ == true {
-			continue
-		} else {
+		if b.data_[idx][i].ticked_ == false {
 			return false
 		}
 	}
@@ -44,9 +42,7 @@ func (b *Board) checkBingoRow(idx int) bool {
 
 func (b *Board) checkBingoCol(idx int) bool {
 	for i := 0; i < 5; i++ {
-		if b.data_[i][idx].ticked_ == true {
-			continue
-		} else {
+		if b.data_[i][idx].ticked_ == false {
 			return false
 		}
 	}
