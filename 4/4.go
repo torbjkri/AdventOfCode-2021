@@ -30,39 +30,37 @@ func (b *Board) CheckInput(input int) (bool, [2]int) {
 	return false, [2]int{-1, -1}
 }
 
-func (b *Board) checkBingoRow(idx int) (bool, int) {
-	sum := 0
+func (b *Board) checkBingoRow(idx int) bool {
 	for i := 0; i < 5; i++ {
 		if b.data_[idx][i].ticked_ == true {
-			sum += b.data_[idx][i].num_
+			continue
 		} else {
-			return false, -1
+			return false
 		}
 	}
 
-	return true, sum
+	return true
 }
 
-func (b *Board) checkBingoCol(idx int) (bool, int) {
-	sum := 0
+func (b *Board) checkBingoCol(idx int) bool {
 	for i := 0; i < 5; i++ {
 		if b.data_[i][idx].ticked_ == true {
-			sum += b.data_[idx][i].num_
+			continue
 		} else {
-			return false, -1
+			return false
 		}
 	}
 
-	return true, sum
+	return true
 }
 
-func (b *Board) CheckBingo(indexes [2]int) (bool, int) {
-	if bingo, sum := b.checkBingoRow(indexes[0]); bingo == true {
-		return bingo, sum
-	} else if bingo, sum := b.checkBingoCol(indexes[1]); bingo == true {
-		return bingo, sum
+func (b *Board) CheckBingo(indexes [2]int) bool {
+	if bingo := b.checkBingoRow(indexes[0]); bingo == true {
+		return bingo
+	} else if bingo := b.checkBingoCol(indexes[1]); bingo == true {
+		return bingo
 	}
-	return false, -1
+	return false
 }
 
 func CreateBoard(data []string) Board {
@@ -131,7 +129,7 @@ func Solve1() int {
 	for _, in := range input {
 		for board_idx, _ := range boards {
 			if hit, idx := boards[board_idx].CheckInput(in); hit == true {
-				if bingo, _ := boards[board_idx].CheckBingo(idx); bingo == true {
+				if bingo := boards[board_idx].CheckBingo(idx); bingo == true {
 					return boards[board_idx].data_sum_ * in
 				}
 			}
@@ -147,7 +145,7 @@ func Solve2() int {
 	for _, in := range input {
 		for board_idx, _ := range boards {
 			if hit, idx := boards[board_idx].CheckInput(in); hit == true {
-				if bingo, _ := boards[board_idx].CheckBingo(idx); bingo == true {
+				if bingo := boards[board_idx].CheckBingo(idx); bingo == true {
 
 					return boards[board_idx].data_sum_ * in
 				}
