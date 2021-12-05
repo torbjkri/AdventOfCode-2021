@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -44,7 +45,41 @@ func executeDay(solution [2]func() int, day int) {
 
 func main() {
 
-	day := getDec1()
-	executeDay(day, 1)
+	var input int
+	var err error
+	err = nil
+
+	if input, err = strconv.Atoi(os.Args[1]); err != nil {
+		panic("Invalid Input")
+	}
+
+	var days [][2]func() int
+
+	switch input {
+	case 0:
+		days = append(days, getDec1())
+		days = append(days, getDec2())
+		days = append(days, getDec3())
+		days = append(days, getDec4())
+	case 1:
+		days = append(days, getDec1())
+	case 2:
+		days = append(days, getDec1())
+	case 3:
+		days = append(days, getDec1())
+	case 4:
+		days = append(days, getDec1())
+
+	}
+
+	if input > 0 {
+		executeDay(days[0], input)
+	} else {
+		for idx, _ := range days {
+			executeDay(days[idx], idx+1)
+			fmt.Println()
+		}
+
+	}
 
 }
