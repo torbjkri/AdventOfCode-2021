@@ -55,25 +55,13 @@ func main() {
 
 	var days [][2]func() int
 
-	switch input {
-	case 0:
-		days = append(days, getDec1())
-		days = append(days, getDec2())
-		days = append(days, getDec3())
-		days = append(days, getDec4())
-	case 1:
-		days = append(days, getDec1())
-	case 2:
-		days = append(days, getDec1())
-	case 3:
-		days = append(days, getDec1())
-	case 4:
-		days = append(days, getDec1())
-
-	}
+	days = append(days, getDec1())
+	days = append(days, getDec2())
+	days = append(days, getDec3())
+	days = append(days, getDec4())
 
 	if input > 0 {
-		executeDay(days[0], input)
+		executeDay(days[input-1], input)
 	} else {
 		for idx, _ := range days {
 			executeDay(days[idx], idx+1)
