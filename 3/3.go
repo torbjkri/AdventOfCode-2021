@@ -52,7 +52,7 @@ func bitSum(values []uint64, bit int) int {
 	return sum
 }
 
-func Solve1() uint64 {
+func Solve1() int {
 	data, numbits := getData("C:/Dev/Go/AdventOfCode-2021/3/data")
 
 	var gamma uint64 = 0
@@ -72,7 +72,7 @@ func Solve1() uint64 {
 		}
 	}
 
-	return gamma * beta
+	return int(gamma * beta)
 }
 
 func scrubData(data []uint64, i int, keep_value bool) []uint64 {
@@ -89,7 +89,7 @@ func scrubData(data []uint64, i int, keep_value bool) []uint64 {
 	return result
 }
 
-func Solve2() uint64 {
+func Solve2() int {
 	data, numbits := getData("C:/Dev/Go/AdventOfCode-2021/3/data")
 
 	o2_data := data
@@ -120,5 +120,5 @@ func Solve2() uint64 {
 	}
 	co2_rating = co2_data[0]
 
-	return o2_rating * co2_rating
+	return int(o2_rating * co2_rating)
 }

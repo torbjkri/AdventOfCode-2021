@@ -6,60 +6,45 @@ import (
 	"dec3"
 	"dec4"
 	"fmt"
+	"log"
+	"os"
 	"time"
 )
 
-func main() {
+func getDec1() [2]func() int {
+	return [2]func() int{dec1.Solve1, dec1.Solve2}
+}
+
+func getDec2() [2]func() int {
+	return [2]func() int{dec2.Solve1, dec2.Solve2}
+}
+
+func getDec3() [2]func() int {
+	return [2]func() int{dec3.Solve1, dec3.Solve2}
+}
+
+func getDec4() [2]func() int {
+	return [2]func() int{dec4.Solve1, dec4.Solve2}
+}
+
+func executeDay(solution [2]func() int, day int) {
+	prefix := fmt.Sprintf("[AoC] December %d: ", day)
+	l := log.New(os.Stdout, prefix, 0)
 	start := time.Now()
-	fmt.Println("December 1 - A: ", dec1.Solve1())
+	l.Printf("Solution  A: %d", solution[0]())
 	timeA := time.Since(start).Microseconds()
-	fmt.Println("Dec 1 part A took: ", timeA, "us")
+	l.Println("Part A took: ", timeA, "us")
 
 	start = time.Now()
-	fmt.Println("December 1 - B: ", dec1.Solve2())
+	l.Printf("Solution B: %d", solution[1]())
 	timeB := time.Since(start).Microseconds()
-	fmt.Println("December 1 part B took: ", timeB, "us")
-	fmt.Println("December 1 took in total : ", timeA+timeB, "us")
-	fmt.Println()
-	fmt.Println()
+	l.Printf("Part B took: %d us", timeB)
+	l.Printf("Took in total : %d us", timeA+timeB)
+}
 
-	//// December 2
-	start = time.Now()
-	fmt.Println("December 2 - A: ", dec2.Solve1())
-	timeA = time.Since(start).Microseconds()
-	fmt.Println("Dec 2 part A took: ", timeA, "us")
+func main() {
 
-	start = time.Now()
-	fmt.Println("December 2 - B: ", dec2.Solve2())
-	timeB = time.Since(start).Microseconds()
-	fmt.Println("December 2 part B took: ", timeB, "us")
-	fmt.Println("December 2 took in total : ", timeA+timeB, "us")
-	fmt.Println()
-	fmt.Println()
-	// December 3
-	start = time.Now()
-	fmt.Println("December 3 - A: ", dec3.Solve1())
-	timeA = time.Since(start).Microseconds()
-	fmt.Println("Dec 23 part A took: ", timeA, "us")
+	day := getDec1()
+	executeDay(day, 1)
 
-	start = time.Now()
-	fmt.Println("December 3 - B: ", dec3.Solve2())
-	timeB = time.Since(start).Microseconds()
-	fmt.Println("December 3 part B took: ", timeB, "us")
-	fmt.Println("December 3 took in total : ", timeA+timeB, "us")
-	fmt.Println()
-	fmt.Println()
-	// December 4
-	start = time.Now()
-	fmt.Println("December 4 - A: ", dec4.Solve1())
-	timeA = time.Since(start).Microseconds()
-	fmt.Println("Dec 4 part A took: ", timeA, "us")
-
-	start = time.Now()
-	fmt.Println("December 4 - B: ", dec4.Solve2())
-	timeB = time.Since(start).Microseconds()
-	fmt.Println("December 4 part B took: ", timeB, "us")
-	fmt.Println("December 4 took in total : ", timeA+timeB, "us")
-	fmt.Println()
-	fmt.Println()
 }
