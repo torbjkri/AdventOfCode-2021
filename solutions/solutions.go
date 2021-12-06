@@ -6,6 +6,7 @@ import (
 	"dec3"
 	"dec4"
 	"dec5"
+	"dec6"
 	"fmt"
 	"log"
 	"os"
@@ -33,19 +34,30 @@ func getDec5() [2]func() int {
 	return [2]func() int{dec5.Solve1, dec5.Solve2}
 }
 
+func getDec6() [2]func() int {
+	return [2]func() int{dec6.Solve1, dec6.Solve2}
+}
+
 func executeDay(solution [2]func() int, day int) {
 	prefix := fmt.Sprintf("[AoC] December %d: ", day)
 	l := log.New(os.Stdout, prefix, 0)
+	l.Printf("Solution A: %d", solution[0]())
 	start := time.Now()
-	l.Printf("Solution  A: %d", solution[0]())
+	//l.Printf("Solution  A: %d", solution[0]())
+	for i := 0; i < 100; i++ {
+		solution[0]()
+	}
 	timeA := time.Since(start).Microseconds()
-	l.Println("Part A took: ", timeA, "us")
+	l.Println("Part A took: ", timeA/100, "us")
 
-	start = time.Now()
 	l.Printf("Solution B: %d", solution[1]())
+	start = time.Now()
+	for i := 0; i < 100; i++ {
+		solution[1]()
+	}
 	timeB := time.Since(start).Microseconds()
-	l.Printf("Part B took: %d us", timeB)
-	l.Printf("Took in total : %d us", timeA+timeB)
+	l.Printf("Part B took: %d us", timeB/100)
+	l.Printf("Took in total : %d us", (timeA+timeB)/100)
 }
 
 func main() {
@@ -65,6 +77,7 @@ func main() {
 	days = append(days, getDec3())
 	days = append(days, getDec4())
 	days = append(days, getDec5())
+	days = append(days, getDec6())
 
 	if input > 0 {
 		executeDay(days[input-1], input)
