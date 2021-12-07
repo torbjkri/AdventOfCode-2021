@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func ReadFile(filename string) []string {
@@ -37,4 +39,18 @@ func ReadFile(filename string) []string {
 	}
 
 	return data
+}
+
+func StringToNumList(list []string, separator string) []int {
+	var result []int
+
+	for _, line := range list {
+		str_line := strings.Split(line, separator)
+		for _, str_num := range str_line {
+			num, _ := strconv.Atoi(str_num)
+			result = append(result, num)
+		}
+	}
+
+	return result
 }
