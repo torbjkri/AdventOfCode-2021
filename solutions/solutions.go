@@ -7,6 +7,7 @@ import (
 	"dec4"
 	"dec5"
 	"dec6"
+	"dec7"
 	"fmt"
 	"log"
 	"os"
@@ -36,6 +37,10 @@ func getDec5() [2]func() int {
 
 func getDec6() [2]func() int {
 	return [2]func() int{dec6.Solve1, dec6.Solve2}
+}
+
+func getDec7() [2]func() int {
+	return [2]func() int{dec7.Solve1, dec7.Solve2}
 }
 
 func executeDay(solution [2]func() int, day int) {
@@ -78,6 +83,7 @@ func main() {
 	days = append(days, getDec4())
 	days = append(days, getDec5())
 	days = append(days, getDec6())
+	days = append(days, getDec7())
 
 	if input > 0 {
 		executeDay(days[input-1], input)
