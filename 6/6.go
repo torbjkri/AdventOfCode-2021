@@ -2,8 +2,6 @@ package dec6
 
 import (
 	"my_utils"
-	"strconv"
-	"strings"
 )
 
 type LanternFish struct {
@@ -44,17 +42,7 @@ func (f *LanternFish) Update() {
 func GetInitialData(filename string) []int {
 	data := my_utils.ReadFile(filename)
 
-	var result []int
-
-	for _, line := range data {
-		str_line := strings.Split(line, ",")
-		for _, str_num := range str_line {
-			num, _ := strconv.Atoi(str_num)
-			result = append(result, num)
-		}
-	}
-
-	return result
+	return my_utils.StringToNumList(data, ",")
 }
 
 func Solve1() int {
