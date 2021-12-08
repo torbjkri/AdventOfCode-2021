@@ -1,7 +1,6 @@
 package dec7
 
 import (
-	"math"
 	"my_utils"
 	"sort"
 )
@@ -35,7 +34,9 @@ func getAverage(list []int) int {
 		sum += elem
 	}
 
-	return int(math.Round(float64(sum) / float64(len(list))))
+	avg := float64(sum) / float64(len(list))
+
+	return int(avg)
 }
 
 func getWeightedDistance(list []int, target int) int {
@@ -69,5 +70,5 @@ func Solve1() int {
 func Solve2() int {
 
 	crabbies := GetInitialData("C:/Dev/Go/AdventOfCode-2021/7/testdata")
-	return getWeightedDistance(crabbies, getAverage(crabbies)+1)
+	return getWeightedDistance(crabbies, getAverage(crabbies))
 }
