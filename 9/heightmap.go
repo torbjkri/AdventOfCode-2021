@@ -7,7 +7,8 @@ import (
 )
 
 type HeightMap struct {
-	data_ [][]int
+	data_     [][]int
+	explored_ [][]bool
 }
 
 type Point struct {
@@ -60,8 +61,49 @@ func (h *HeightMap) GetLowPoints() (sum int, result []Point) {
 	return sum, result
 }
 
-funct (h *HeightMap) ExploreBasin(p Point) {
-	
+func (h *HeightMap) ExploreBasin(p Point, sum int) int {
+	// check above
+	i := p.row_
+	j := p.col_
+	val := h.data_[i][j]
+
+	max_rows := len(h.data_)
+	max_cols := len(h.data_[0])
+
+	if i > 0 {
+		v := h.data_[i-1][j]
+		e := h.explored_[i-1][j]
+		if v > val && v != 9 && !e {
+			sum = h.ExploreBasin(Point{row_: i - 1, col_: j}, sum)
+		}
+
+	}
+	if i < max_rows-1 {
+		v := h.data_[i+1][j]
+		e := h.explored_[i+1][j]
+		if v > val && v != 9 && !e {
+			sum = h.ExploreBasin(Point{row_: i + 1, col_: j}, sum)
+		}
+	}
+	if j > 0 {
+		v := h.data_[i][j-1]
+		e := h.explored_[i][j-1]
+		if v > val && v != 9 && !e {
+			sum = h.ExploreBasin(Point{row_: i, col_: j - 1}, sum)
+		}
+
+	}
+	if j < max_cols-1 {
+		v := h.data_[i][j+1]
+		e := h.explored_[i][j+1]
+		if v > val && v != 9 && !e {
+			sum = h.ExploreBasin(Point{row_: i, col_: j + 1}, sum)
+		}
+	}
+
+	h.explored_[i][j] = true
+
+	return sum + 1
 }
 
 func CreateHeightMap(data []string) *HeightMap {
@@ -69,6 +111,7 @@ func CreateHeightMap(data []string) *HeightMap {
 
 	for _, stringline := range data {
 		var HeightMapline []int
+		var boolLine []bool
 		line := strings.Split(stringline, "")
 
 		for _, strnum := range line {
@@ -77,9 +120,11 @@ func CreateHeightMap(data []string) *HeightMap {
 			}
 			num, _ := strconv.Atoi(strnum)
 			HeightMapline = append(HeightMapline, num)
+			boolLine = append(boolLine, false)
 		}
 
 		HeightMap.data_ = append(HeightMap.data_, HeightMapline)
+		HeightMap.explored_ = append(HeightMap.explored_, boolLine)
 	}
 	return HeightMap
 }
