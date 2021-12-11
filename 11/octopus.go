@@ -1,5 +1,7 @@
 package dec11
 
+import "image/color"
+
 type Octopus struct {
 	energy_ int
 }
@@ -31,4 +33,15 @@ func (o *Octopus) Pump() {
 	if o.energy_ > 0 {
 		o.energy_ += 1
 	}
+}
+
+func (o *Octopus) GetEnergyColor() (col color.Gray) {
+
+	if o.energy_ <= 9 {
+		col.Y = uint8(150.0 * float64(o.energy_) / 9.0)
+	} else {
+		col.Y = 255
+	}
+
+	return
 }

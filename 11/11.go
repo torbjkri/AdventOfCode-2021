@@ -5,7 +5,7 @@ import (
 )
 
 func Solve1() int {
-	data := my_utils.ReadFile("C:/Dev/Go/AdventOfCode-2021/11/testdata")
+	data := my_utils.ReadFile("C:/Dev/Go/AdventOfCode-2021/11/data")
 
 	g := CreateGrid(data)
 
@@ -17,5 +17,18 @@ func Solve1() int {
 }
 
 func Solve2() int {
-	return 1
+	//data := my_utils.ReadFile("C:/Dev/Go/AdventOfCode-2021/11/data")
+
+	g := CreateRandomGrid(20, 100)
+
+	for i := 1; ; i++ {
+		g.Update()
+		if g.AllFlashed() {
+			return i
+		}
+		g.UpdateImage()
+		g.Visualize()
+	}
+
+	return 0
 }
