@@ -4,6 +4,8 @@ import (
 	"dec1"
 	"dec10"
 	"dec11"
+	"dec13"
+	"dec15"
 	"dec2"
 	"dec3"
 	"dec4"
@@ -63,6 +65,22 @@ func getDec11() [2]func() int {
 	return [2]func() int{dec11.Solve1, dec11.Solve2}
 }
 
+func getDec12() [2]func() int {
+	return [2]func() int{func() int { return 1 }, func() int { return 1 }}
+}
+
+func getDec13() [2]func() int {
+	return [2]func() int{dec13.Solve1, dec13.Solve2}
+}
+
+func getDec14() [2]func() int {
+	return [2]func() int{func() int { return 1 }, func() int { return 1 }}
+}
+
+func getDec15() [2]func() int {
+	return [2]func() int{dec15.Solve1, dec15.Solve2}
+}
+
 func executeDay(solution [2]func() int, day int, times int) {
 	prefix := fmt.Sprintf("[AoC] December %d: ", day)
 	l := log.New(os.Stdout, prefix, 0)
@@ -113,6 +131,10 @@ func main() {
 	days = append(days, getDec9())
 	days = append(days, getDec10())
 	days = append(days, getDec11())
+	days = append(days, getDec12())
+	days = append(days, getDec13())
+	days = append(days, getDec14())
+	days = append(days, getDec15())
 
 	if day > 0 {
 		executeDay(days[day-1], day, times)
