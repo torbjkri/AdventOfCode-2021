@@ -1,6 +1,7 @@
 package dec15
 
 import (
+	"fmt"
 	"math"
 	"sort"
 )
@@ -38,6 +39,9 @@ type Node struct {
 	children_ []Position
 
 	shorted_parent_ *Node
+
+	weight_     int
+	naked_risk_ int
 }
 
 func NewNode(p Position, maxP Position, r int) (n *Node) {
@@ -45,6 +49,9 @@ func NewNode(p Position, maxP Position, r int) (n *Node) {
 	n.pos_ = p
 	n.risk_ = r
 	n.total_risk_ = math.MaxInt
+	n.naked_risk_ = math.MaxInt
+
+	n.weight_ = maxP.x_ + maxP.y_ - p.x_ - p.y_
 
 	if p.x_ > 0 {
 		n.children_ = append(n.children_, Pos(p.x_-1, p.y_))
@@ -65,48 +72,90 @@ func NewNode(p Position, maxP Position, r int) (n *Node) {
 }
 
 func (n *Node) Visit(visitor *Node) {
-	tot := visitor.total_risk_ + n.risk_
+	tot := visitor.naked_risk_ + n.risk_ + n.weight_
 
 	if tot < n.total_risk_ {
 		n.total_risk_ = tot
+		n.naked_risk_ = visitor.naked_risk_ + n.risk_
 		n.shorted_parent_ = visitor
 	}
 
 	n.children_ = RemovePosition(n.children_, &visitor.pos_)
 }
 
-func Sort(ns []*Node) []*Node {
-	sort.Slice(ns, func(i, j int) bool {
-		return ns[i].total_risk_ > ns[j].total_risk_
-	})
-
-	return ns
+type NodeSlice struct {
+	data_ []*Node
 }
 
-func Pop(ns []*Node) ([]*Node, *Node) {
-	last := ns[len(ns)-1]
-	return ns[:len(ns)-1], last
+func (ns *NodeSlice) RemoveNode(n *Node) {
+	for i, _ := range ns.data_ {
+		if ns.data_[i].pos_.Equal(&n.pos_) {
+			ns.data_[i] = ns.data_[len(ns.data_)-1]
+
+			ns.data_ = ns.data_[:len(ns.data_)-1]
+			return
+		}
+	}
+	return
 }
 
-func Push(ns []*Node, n *Node) []*Node {
-	return append(ns, n)
-}
-
-func Find(ns []*Node, p Position) (o *Node) {
-	for i, _ := range ns {
-		if ns[i].pos_.Equal(&p) {
-			return ns[i]
+func (ns *NodeSlice) Find(p Position) (o *Node) {
+	for i, _ := range ns.data_ {
+		if ns.data_[i].pos_.Equal(&p) {
+			return ns.data_[i]
 		}
 	}
 	return nil
 }
 
-func RemoveNode(ns []*Node, n *Node) []*Node {
-	for i, _ := range ns {
-		if ns[i].pos_.Equal(&n.pos_) {
-			ns[i] = ns[len(ns)-1]
-			return ns[:len(ns)-1]
+func (ns *NodeSlice) Push(n *Node) {
+	ns.data_ = append(ns.data_, n)
+}
+
+func (ns *NodeSlice) Pop() *Node {
+	last := ns.data_[len(ns.data_)-1]
+	ns.data_ = ns.data_[:len(ns.data_)-1]
+	return last
+}
+
+func (ns *NodeSlice) Sort() {
+	sort.Slice(ns.data_, func(i, j int) bool {
+		return ns.data_[i].total_risk_ > ns.data_[j].total_risk_
+	})
+}
+
+func (ns *NodeSlice) AddSorted(n *Node) {
+	if len(ns.data_) == 0 {
+		ns.data_ = append(ns.data_, n)
+		return
+	}
+	for i := len(ns.data_) - 1; i >= 0; i-- {
+		if ns.data_[i].total_risk_ > n.total_risk_ {
+			ns.data_ = append(ns.data_[:i+1], ns.data_[i:]...)
+			ns.data_[i] = n
+			return
 		}
 	}
-	return ns
+	ns.data_ = append([]*Node{n}, ns.data_...)
+}
+
+func (ns *NodeSlice) Update(n *Node) {
+
+	newPos := -1
+	for i := len(ns.data_) - 1; i >= 0; i-- {
+		if newPos == -1 {
+			if ns.data_[i].total_risk_ > n.total_risk_ {
+				newPos = i
+			}
+		}
+		if ns.data_[i].pos_.Equal(&n.pos_) {
+			if newPos != i {
+				fmt.Printf("%v, %v, %v\n", i, newPos, len(ns.data_))
+				temp := append(ns.data_[i+1:newPos:newPos-i], ns.data_[newPos-1:]...)
+				ns.data_ = append(ns.data_[:i], temp...)
+				ns.data_[newPos] = n
+				return
+			}
+		}
+	}
 }

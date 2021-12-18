@@ -7,11 +7,9 @@ import (
 )
 
 type Grid struct {
-	finished_ []*Node
-
-	visited_ []*Node
-
-	unvisited_ []*Node
+	finished_  NodeSlice
+	visited_   NodeSlice
+	unvisited_ NodeSlice
 
 	start_ Position
 	end_   Position
@@ -19,30 +17,37 @@ type Grid struct {
 
 func (g *Grid) FindShortestPath() int {
 
-	currentNode := g.visited_[0]
+	currentNode := g.visited_.data_[0]
 
 	for !g.end_.Equal(&currentNode.pos_) {
 
 		for i, _ := range currentNode.children_ {
 			var child *Node = nil
 			childpos := currentNode.children_[i]
-			if child = Find(g.finished_, childpos); child != nil {
+			if child = g.finished_.Find(childpos); child != nil {
 				fmt.Println("Children not properly reset")
 				return -1
-			} else if child = Find(g.visited_, childpos); child != nil {
+			} else if child = g.visited_.Find(childpos); child != nil {
+				oldVal := child.total_risk_
 				child.Visit(currentNode)
-			} else if child = Find(g.unvisited_, childpos); child != nil {
+				if child.total_risk_ < oldVal {
+					g.visited_.Update(child)
+				}
+
+			} else if child = g.unvisited_.Find(childpos); child != nil {
 				child.Visit(currentNode)
-				g.visited_ = Push(g.visited_, child)
-				g.unvisited_ = RemoveNode(g.unvisited_, child)
+				g.visited_.AddSorted(child)
+
+				g.unvisited_.RemoveNode(child)
+
 			} else {
 				fmt.Println("Unable to locate node!!")
 				return -1
 			}
 		}
-		g.finished_ = Push(g.finished_, currentNode)
-		g.visited_ = Sort(g.visited_)
-		g.visited_, currentNode = Pop(g.visited_)
+		g.finished_.Push(currentNode)
+
+		currentNode = g.visited_.Pop()
 
 	}
 
@@ -52,15 +57,15 @@ func (g *Grid) FindShortestPath() int {
 	//	currentNode = currentNode.shorted_parent_
 	//}
 
-	return currentNode.total_risk_
+	return currentNode.naked_risk_
 }
 
 func NewGrid(data []string) (g *Grid) {
 	g = new(Grid)
 
-	g.finished_ = []*Node{}
-	g.unvisited_ = []*Node{}
-	g.visited_ = []*Node{}
+	g.finished_ = NodeSlice{[]*Node{}}
+	g.unvisited_ = NodeSlice{[]*Node{}}
+	g.visited_ = NodeSlice{[]*Node{}}
 
 	g.start_ = Pos(0, 0)
 
@@ -76,9 +81,10 @@ func NewGrid(data []string) (g *Grid) {
 			if i == 0 && j == 0 {
 				n := NewNode(Pos(0, 0), Pos(max, may), num)
 				n.total_risk_ = 0
-				g.visited_ = append(g.visited_, n)
+				n.naked_risk_ = 0
+				g.visited_.Push(n)
 			} else {
-				g.unvisited_ = append(g.unvisited_, NewNode(Pos(i, j), Pos(max, may), num))
+				g.unvisited_.Push(NewNode(Pos(i, j), Pos(max, may), num))
 			}
 		}
 	}
@@ -89,9 +95,9 @@ func NewGrid(data []string) (g *Grid) {
 func NewGrid5x(data []string) (g *Grid) {
 	g = new(Grid)
 
-	g.finished_ = []*Node{}
-	g.unvisited_ = []*Node{}
-	g.visited_ = []*Node{}
+	g.finished_ = NodeSlice{[]*Node{}}
+	g.unvisited_ = NodeSlice{[]*Node{}}
+	g.visited_ = NodeSlice{[]*Node{}}
 
 	g.start_ = Pos(0, 0)
 
@@ -114,9 +120,10 @@ func NewGrid5x(data []string) (g *Grid) {
 					if i == 0 && j == 0 && extrax == 0 && extray == 0 {
 						n := NewNode(Pos(0, 0), Pos(max, may), num)
 						n.total_risk_ = 0
-						g.visited_ = append(g.visited_, n)
+						n.naked_risk_ = 0
+						g.visited_.Push(n)
 					} else {
-						g.unvisited_ = append(g.unvisited_, NewNode(Pos(i+extrax*len(data), j+extray*len(data[0])), Pos(max, may), num))
+						g.unvisited_.Push(NewNode(Pos(i+extrax*len(data), j+extray*len(data[0])), Pos(max, may), num))
 					}
 				}
 			}
