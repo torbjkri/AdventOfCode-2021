@@ -81,3 +81,13 @@ func TestBitSliceToByte(t *testing.T) {
 		t.Errorf("Incorrect parsing! Got %v, expected %v", result, want)
 	}
 }
+
+func TestBitSliceToInt(t *testing.T) {
+	result := BitSliceToInt([]int{1, 0, 0, 0, 1, 1, 1, 1, 0})
+
+	var want int = 286
+
+	if result != want {
+		t.Errorf("Incorrect parsing! Got %v, expected %v", result, want)
+	}
+}

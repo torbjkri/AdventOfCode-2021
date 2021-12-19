@@ -40,6 +40,18 @@ func BitSliceToBytes(ints []int) []byte {
 
 }
 
+func BitSliceToInt(ints []int) int {
+	sum := 0
+	multiplier := 1
+
+	for i := len(ints) - 1; i >= 0; i-- {
+		sum += multiplier * ints[i]
+		multiplier *= 2
+	}
+
+	return sum
+}
+
 func Parse(data string) []int {
 	if rr, err := hex.DecodeString(data); err != nil {
 		panic(err)
