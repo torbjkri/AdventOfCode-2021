@@ -24,11 +24,16 @@ func ParseLine(data string) (*Node, string) {
 		return n, data[1:] // removing ]
 	}
 
-	num, _ := strconv.Atoi(string(data[0]))
+	num_size := 1
 
+	if _, err := strconv.Atoi(string(data[1])); err == nil {
+		num_size = 2
+
+	}
+	num, _ := strconv.Atoi(string(data[:num_size]))
 	n.is_num_ = true
 	n.value_ = num
 
-	return n, data[1:] // removing the number
+	return n, data[num_size:] // removing the number
 
 }

@@ -1,6 +1,8 @@
 package dec18
 
-import "strconv"
+import (
+	"strconv"
+)
 
 var nex_node_id int = 0
 
@@ -134,4 +136,27 @@ func (n *Node) GetString() string {
 	} else {
 		return "[" + n.left_.GetString() + "," + n.right_.GetString() + "]"
 	}
+}
+
+func AddNodes(left *Node, right *Node) *Node {
+	result := &Node{}
+
+	result.is_num_ = false
+	result.parent_ = nil
+	result.value_ = 0
+
+	result.left_ = left
+	result.left_.parent_ = result
+
+	result.right_ = right
+	result.right_.parent_ = result
+
+	return result
+}
+
+func (n *Node) getMagnitude() int {
+	if n.is_num_ {
+		return n.value_
+	}
+	return 3*n.left_.getMagnitude() + 2*n.right_.getMagnitude()
 }
