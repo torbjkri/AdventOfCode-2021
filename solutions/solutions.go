@@ -63,6 +63,7 @@ func main() {
 	days = append(days, getDec14())
 	days = append(days, getDec15())
 	days = append(days, getDec16())
+	days = append(days, getDec17())
 
 	if day > 0 {
 		executeDay(days[day-1], day, times)

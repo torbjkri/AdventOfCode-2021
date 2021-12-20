@@ -21,7 +21,10 @@ require (
 	dec9 v0.0.0-00010101000000-000000000000
 )
 
-require my_utils v0.0.0-00010101000000-000000000000 // indirect
+require (
+	dec17 v0.0.0-00010101000000-000000000000 // indirect
+	my_utils v0.0.0-00010101000000-000000000000 // indirect
+)
 
 replace my_utils => ../utils
 
@@ -52,3 +55,5 @@ replace dec14 => ../14
 replace dec15 => ../15
 
 replace dec16 => ../16
+
+replace dec17 => ../17

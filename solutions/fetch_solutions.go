@@ -7,6 +7,7 @@ import (
 	"dec13"
 	"dec15"
 	"dec16"
+	"dec17"
 	"dec2"
 	"dec3"
 	"dec4"
@@ -79,4 +80,8 @@ func getDec15() [2]func() int {
 
 func getDec16() [2]func() int {
 	return [2]func() int{dec16.Solve1, dec16.Solve2}
+}
+
+func getDec17() [2]func() int {
+	return [2]func() int{dec17.Solve1, dec17.Solve2}
 }
